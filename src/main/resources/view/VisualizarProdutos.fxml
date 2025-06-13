@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane  xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.VisualizarProdutosController">
+    <top>
+        <VBox alignment="CENTER" styleClass="header-box">
+            <children>
+                <Label styleClass="header-title" text="Catálogo de Produtos" />
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <TextField fx:id="searchField" promptText="Pesquisar por nome..." HBox.hgrow="ALWAYS" />
+                        <Button fx:id="searchButton" onAction="#handleSearch" text="Pesquisar" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <StackPane fx:id="mainStackPane">
+            <children>
+                <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER">
+                    <content>
+                        <FlowPane fx:id="productGrid" hgap="20.0" styleClass="product-grid" vgap="20.0" />
+                    </content>
+                </ScrollPane>
+                <VBox fx:id="statusContainer" alignment="CENTER" spacing="10.0" style="-fx-background-color: #F4F4F4;" visible="false">
+                    <children>
+                        <ProgressIndicator fx:id="progressIndicator" />
+                        <Label fx:id="statusLabel" styleClass="status-label" text="Carregando produtos..." />
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.exemplo.controllers.DetalhePecaController"
+            style="-fx-background-color: #f4f4f9;">
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;">
+            <VBox spacing="20" alignment="CENTER" style="-fx-padding: 30;">
+                <StackPane style="-fx-background-color: white; -fx-background-radius: 20;">
+                    <effect>
+                        <DropShadow height="40" width="40" radius="20">
+                            <color>
+                                <Color opacity="0.15"/>
+                            </color>
+                        </DropShadow>
+                    </effect>
+                    <VBox spacing="20" alignment="CENTER" style="-fx-padding: 30 40 30 40;">
+                        <Label fx:id="nomeLabel" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                        <StackPane>
+                            <ImageView fx:id="imagemView" fitHeight="220" fitWidth="320" preserveRatio="true"/>
+                            <Button fx:id="btnAnterior" onAction="#mostrarImagemAnterior" text="&lt;"
+                                    style="-fx-background-color: rgba(44, 62, 80, 0.6); -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 50em; -fx-min-width: 40px; -fx-min-height: 40px;"
+                                    StackPane.alignment="CENTER_LEFT">
+                                <StackPane.margin>
+                                    <Insets left="10.0"/>
+                                </StackPane.margin>
+                            </Button>
+                            <Button fx:id="btnProxima" onAction="#mostrarProximaImagem" text="&gt;"
+                                    style="-fx-background-color: rgba(44, 62, 80, 0.6); -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 50em; -fx-min-width: 40px; -fx-min-height: 40px;"
+                                    StackPane.alignment="CENTER_RIGHT">
+                                <StackPane.margin>
+                                    <Insets right="10.0"/>
+                                </StackPane.margin>
+                            </Button>
+                        </StackPane>
+                        <HBox spacing="30" alignment="CENTER">
+                            <Label fx:id="tipoLabel" style="-fx-font-size: 16px; -fx-text-fill: #7f8c8d;"/>
+                            <Label fx:id="poderLabel" style="-fx-font-size: 16px; -fx-text-fill: #7f8c8d;"/>
+                        </HBox>
+                        <HBox spacing="30" alignment="CENTER" style="-fx-padding: 5 0 5 0;">
+                            <Label fx:id="precoLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                            <Label fx:id="quantidadeLabel" style="-fx-font-size: 16px; -fx-text-fill: #95a5a6;"/>
+                        </HBox>
+
+                        <!-- ÁREA DA DESCRIÇÃO SEM SCROLLPANE EXTERNO -->
+                        <TextArea fx:id="descricaoTextArea" wrapText="true" editable="false" prefHeight="70"
+                                  style="-fx-background-color: transparent; -fx-font-size: 14px; -fx-text-fill: #34495e; -fx-border-color: #ecf0f1; -fx-border-width: 2 0 0 0; -fx-padding: 10 0 0 0;"/>
+
+                        <Label fx:id="lerMaisLabel" text="Ler mais..." managed="false" visible="false" onMouseClicked="#expandirDescricao"
+                               style="-fx-font-size: 14px; -fx-text-fill: #3498db; -fx-font-weight: bold; -fx-cursor: hand;"/>
+
+                        <HBox spacing="20" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                            <Button text="Adicionar ao Carrinho" fx:id="btnComprar"
+                                    style="-fx-background-color: linear-gradient(to bottom, #3498db, #2980b9); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20; -fx-font-size: 14;"/>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

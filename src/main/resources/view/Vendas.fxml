@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.VendasController">
+
+    <left>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: white;">
+            <content>
+                <VBox prefWidth="240.0" spacing="20.0" style="-fx-background-color: white; -fx-border-color: #e2e8f0; -fx-border-width: 0 1 0 0;">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <children>
+                        <Label text="Filtros" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label text="Categorias" style="-fx-font-weight: bold;" />
+                                <Separator />
+                                <CheckBox text="Placas de Vídeo" />
+                                <CheckBox text="Processadores" />
+                                <CheckBox text="Memória RAM" />
+                                <CheckBox text="Monitores" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label text="Marcas" style="-fx-font-weight: bold;" />
+                                <Separator />
+                                <CheckBox text="NVIDIA" />
+                                <CheckBox text="AMD" />
+                                <CheckBox text="Intel" />
+                                <CheckBox text="Corsair" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label text="Faixa de Preço" style="-fx-font-weight: bold;" />
+                                <Separator />
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <TextField promptText="Mínimo" />
+                                        <TextField promptText="Máximo" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                        <Button maxWidth="Infinity" text="Aplicar Filtros" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-cursor: hand;"/>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </left>
+
+    <center>
+        <BorderPane>
+            <top>
+                <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: white; -fx-border-color: #e2e8f0; -fx-border-width: 0 0 1 0;">
+                    <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                    </padding>
+                    <children>
+                        <TextField HBox.hgrow="ALWAYS" promptText="O que você está procurando?" style="-fx-font-size: 14px;" />
+                        <Button text="Buscar" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+            </top>
+
+            <center>
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                    <content>
+                        <TilePane fx:id="productGrid" hgap="20.0" vgap="20.0" style="-fx-background-color: transparent;">
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                            <children>
+                                <VBox alignment="CENTER" prefHeight="320.0" prefWidth="220.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                    </padding>
+                                    <children>
+                                        <ImageView fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../img/placeholder.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Label text="Placa de Vídeo Exemplo RTX 9090 24GB" wrapText="true" style="-fx-font-weight: bold;"/>
+                                        <Label text="R$ 9.999,99" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2d3748;"/>
+                                        <Button maxWidth="Infinity" text="Adicionar ao Carrinho" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;"/>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="320.0" prefWidth="220.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                                    <padding><Insets bottom="15.0" left="15.0" right="15.0" top="15.0" /></padding>
+                                    <children>
+                                        <ImageView fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
+                                            <image><Image url="@../img/placeholder.png" /></image>
+                                        </ImageView>
+                                        <Label text="Processador SuperCore i11 6.0Ghz" wrapText="true" style="-fx-font-weight: bold;"/>
+                                        <Label text="R$ 4.599,90" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2d3748;"/>
+                                        <Button maxWidth="Infinity" text="Adicionar ao Carrinho" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </TilePane>
+                    </content>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

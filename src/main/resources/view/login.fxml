@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane fx:id="rootGridPane" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.LoginController">
+
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="ALWAYS" />
+    </rowConstraints>
+
+    <StackPane fx:id="imagePane" style="-fx-background-color: #000000;" GridPane.columnIndex="0">
+        <children>
+            <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <!-- CORRIGIDO: Removido o ']' extra do nome do arquivo -->
+                    <Image url="@../img/img1].png" />
+                </image>
+            </ImageView>
+        </children>
+    </StackPane>
+
+    <StackPane GridPane.columnIndex="1">
+        <children>
+            <VBox alignment="CENTER" maxWidth="320.0" spacing="15.0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <children>
+                    <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Bem-vindo de Volta!" />
+                    <TextField fx:id="emailField" promptText="Seu e-mail" style="-fx-font-size: 14px;" />
+                    <PasswordField fx:id="senhaField" promptText="Sua senha" style="-fx-font-size: 14px;" />
+
+                    <!-- ORGANIZADO: Link "Esqueceu sua senha?" movido para cá -->
+                    <HBox alignment="CENTER_RIGHT" maxWidth="Infinity">
+                        <children>
+                            <Hyperlink onAction="#handleEsqueceuSenha" text="Esqueceu sua senha?" />
+                        </children>
+                    </HBox>
+                    <Label fx:id="statusLabel" style="-fx-text-fill: red; -fx-font-weight: bold;" wrapText="true" />
+                    <Button onAction="#handleLogin" maxWidth="Infinity" style="-fx-cursor: hand; -fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Entrar" />
+
+                    <HBox alignment="CENTER" spacing="10.0">
+                        <children>
+                            <Region style="-fx-background-color: #dcdcdc;" HBox.hgrow="ALWAYS" prefHeight="1" />
+                            <Label text="OU" style="-fx-text-fill: #8a8a8a;" />
+                            <Region style="-fx-background-color: #dcdcdc;" HBox.hgrow="ALWAYS" prefHeight="1" />
+                        </children>
+                    </HBox>
+
+                    <Button onAction="#handleGoogleLogin" maxWidth="Infinity" style="-fx-cursor: hand; -fx-background-color: white; -fx-border-color: #dcdcdc; -fx-border-radius: 2; -fx-background-radius: 2; -fx-font-size: 14px; -fx-text-fill: #444444;">
+                        <graphic>
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/google_logo.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <text>Entrar com Google</text>
+                    </Button>
+
+                    <!-- ORGANIZADO: Seção de cadastro movida para o final -->
+                    <HBox alignment="CENTER" spacing="5.0">
+                        <VBox.margin>
+                            <Insets top="10.0" />
+                        </VBox.margin>
+                        <children>
+                            <Label text="Não tem uma conta?" />
+                            <Button onAction="#paginaCadastro" style="-fx-cursor: hand; -fx-background-color: transparent; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" text="Crie uma agora" />
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+        </children>
+    </StackPane>
+</GridPane>

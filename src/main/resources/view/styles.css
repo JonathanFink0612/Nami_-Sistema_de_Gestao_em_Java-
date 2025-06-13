@@ -1,0 +1,16 @@
+/* Estilo para os botões da barra de navegação */
+.nav-button {
+    -fx-background-color: transparent; /* Fundo transparente */
+    -fx-text-fill: #a0aec0;             /* Cor do texto cinza claro */
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;        /* Alinha o texto à esquerda */
+    -fx-padding: 10 10 10 30;          /* Espaçamento interno */
+    -fx-background-radius: 0;          /* Bordas retas */
+    -fx-cursor: hand;
+}
+
+/* Efeito ao passar o mouse sobre o botão */
+.nav-button:hover {
+    -fx-background-color: #2d3748; /* Fundo um pouco mais claro */
+    -fx-text-fill: white;          /* Texto branco */
+}
