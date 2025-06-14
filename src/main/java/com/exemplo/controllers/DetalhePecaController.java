@@ -37,6 +37,7 @@ public class DetalhePecaController {
         tipoLabel.setText("Tipo: " + peca.getTipoPeca());
         poderLabel.setText("Poder: " + peca.getPoderComputacional());
         precoLabel.setText(String.format("R$ %.2f", peca.getPreco()));
+
         quantidadeLabel.setText("Qtd: " + peca.getQuantidade());
         descricaoTextArea.setText(peca.getDescricao());
 
@@ -107,7 +108,7 @@ public class DetalhePecaController {
             atualizarImagemExibida();
         }
     }
-
+    // isso fecha o app se um dia precissar
     @FXML
     private void fechar() {
         Stage stage = (Stage) nomeLabel.getScene().getWindow();

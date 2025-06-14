@@ -28,6 +28,7 @@ public class PecaSupabaseClient {
     private final HttpClient client = HttpClient.newHttpClient();
 
     public List<Peca> fetchAllProdutos(String nameFilter) throws Exception {
+        // A query com `select=*` já busca todas as colunas.
         String endpoint = SUPABASE_URL + "/rest/v1/peca_padrao?select=*,imagens_peca(url_imagem)";
         if (nameFilter != null && !nameFilter.trim().isEmpty()) {
             String encodedFilter = URLEncoder.encode("%" + nameFilter.trim() + "%", StandardCharsets.UTF_8);
@@ -47,12 +48,15 @@ public class PecaSupabaseClient {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
 
+            // CORREÇÃO: Adicionado 'codigo_de_barras' na criação do objeto Peca.
             Peca peca = new Peca(
                     obj.getInt("peca_id"),
                     obj.getString("nome_peca"),
                     obj.optString("descricao_peca", ""),
                     obj.optString("tipo_peca", null),
-                    obj.optInt("poder_computacional", 0)
+                    obj.optInt("poder_computacional", 0),
+                    obj.optDouble("preco", 0.0),
+                    obj.optString("codigo_de_barras", null) // NOVO: Campo de código de barras
             );
 
             JSONArray imagensArray = obj.getJSONArray("imagens_peca");
@@ -66,7 +70,7 @@ public class PecaSupabaseClient {
 
     public int salvarPecaCompleta(Peca peca) throws Exception {
         int pecaId = inserirPecaPadrao(peca);
-        if (!peca.getCamposAdicionais().isEmpty() && !"Peça Genérica".equals(peca.getTipoPeca())) {
+        if (peca.getCamposAdicionais() != null && !peca.getCamposAdicionais().isEmpty() && !"Peça Genérica".equals(peca.getTipoPeca())) {
             String nomeTabelaEspecializada = mapearTipoParaNomeTabela(peca.getTipoPeca());
             inserirPecaEspecializada(pecaId, nomeTabelaEspecializada, peca.getCamposAdicionais());
         }
@@ -77,6 +81,8 @@ public class PecaSupabaseClient {
         String endpoint = SUPABASE_URL + "/rest/v1/peca_padrao";
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("nome_peca", peca.getNome());
+        jsonBody.put("preco", peca.getPreco());
+        jsonBody.put("codigo_de_barras", peca.getCodigoDeBarras()); // NOVO: Adiciona o código de barras
         jsonBody.put("descricao_peca", peca.getDescricao());
         jsonBody.put("poder_computacional", peca.getPoderComputacional());
         Object tipoPecaParaDb = mapearTipoParaEnumDB(peca.getTipoPeca());
@@ -87,11 +93,8 @@ public class PecaSupabaseClient {
         return new JSONArray(response.body()).getJSONObject(0).getInt("peca_id");
     }
 
-    /**
-     * CORRIGIDO: Removido o "public/" duplicado da construção do caminho.
-     */
+
     public void uploadImagemESalvarUrl(File imagem, int pecaId) throws Exception {
-        // O caminho dentro do bucket não precisa incluir "public/"
         String pathNoBucket = pecaId + "/" + System.currentTimeMillis() + "_" + imagem.getName();
         String uploadEndpoint = SUPABASE_URL + "/storage/v1/object/" + BUCKET_NAME + "/" + pathNoBucket;
 
@@ -104,7 +107,7 @@ public class PecaSupabaseClient {
             throw new Exception("Falha no upload da imagem para o Storage. Resposta: " + uploadResponse.body());
         }
 
-        // A URL pública é construída com o "public/" aqui
+
         String publicUrl = SUPABASE_URL + "/storage/v1/object/" + BUCKET_NAME + "/" + pathNoBucket;
         inserirUrlImagemNoDB(pecaId, publicUrl);
     }

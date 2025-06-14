@@ -51,10 +51,10 @@
                 <Button fx:id="btnInicio" onAction="#handleDashboard" text="Início" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
                     <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
                 </Button>
-                <Button fx:id="btnVendas" onAction="#handleVendas" text="Vendas" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
+                <Button fx:id="btnVendas" onAction="#handleVendas" text="Consutar estoque" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
                     <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
                 </Button>
-                <Button fx:id="btnCadastro" text="cadastro"  onAction="#handlecadastro" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
+                <Button fx:id="btnCadastro" text="Cadastro de Produtos"  onAction="#handlecadastro" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
                     <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
                 </Button>
 
