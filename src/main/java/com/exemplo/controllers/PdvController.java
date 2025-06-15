@@ -17,7 +17,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class PdvController {
 
@@ -77,21 +80,24 @@ public class PdvController {
     }
 
     /**
-     * MÉTODO NECESSÁRIO PARA O FXML
-     * Este método é chamado toda vez que o usuário digita no campo de busca.
+     * Lida com a busca de produtos na tela de Ponto de Venda.
      */
     @FXML
     private void handleBusca() {
         String termo = buscaField.getText();
-        if (termo == null || termo.length() < 2) {
-            tabelaBusca.getItems().clear();
-            return;
-        }
+
+        Map<String, Object> filtros = new HashMap<>();
+        filtros.put("termo_busca_geral", termo);
 
         new Thread(() -> {
             try {
-                ObservableList<Peca> pecas = FXCollections.observableArrayList(pecaService.fetchAllProdutos(termo));
-                Platform.runLater(() -> tabelaBusca.setItems(pecas));
+                // CORREÇÃO APLICADA AQUI: Adicionado o segundo argumento 'false'.
+                // Isto diz ao serviço para buscar apenas produtos ativos.
+                List<Peca> pecasEncontradas = pecaService.fetchProdutosComFiltros(filtros, false);
+
+                Platform.runLater(() -> {
+                    tabelaBusca.setItems(FXCollections.observableArrayList(pecasEncontradas));
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -101,7 +107,7 @@ public class PdvController {
     @FXML
     private void handleFinalizarVenda() {
         if (!SessionManager.getInstance().isLoggedIn()) {
-            exibirAlerta("Erro de Sessão", "Nenhum usuário está logado.\n\nPor favor, saia e faça o login novamente para registrar a venda.", Alert.AlertType.ERROR);
+            exibirAlerta("Erro de Sessão", "Nenhum usuário está logado.\n\nPor favor, saia e faça o login novamente para registar a venda.", Alert.AlertType.ERROR);
             return;
         }
 
@@ -115,7 +121,7 @@ public class PdvController {
         }
 
         btnFinalizarVenda.setDisable(true);
-        statusLabel.setText("Processando venda...");
+        statusLabel.setText("A processar venda...");
 
         Venda novaVenda = new Venda(
                 carrinhoService.getItens().stream().mapToDouble(VendaItem::getSubtotal).sum(),
@@ -128,11 +134,11 @@ public class PdvController {
             try {
                 transacaoService.registrarVenda(novaVenda);
                 Platform.runLater(() -> {
-                    exibirAlerta("Sucesso", "Venda registrada com sucesso!", Alert.AlertType.INFORMATION);
+                    exibirAlerta("Sucesso", "Venda registada com sucesso!", Alert.AlertType.INFORMATION);
                     limparVenda();
                 });
             } catch (Exception e) {
-                Platform.runLater(() -> exibirAlerta("Erro de Conexão", "Falha ao registrar a venda: " + e.getMessage(), Alert.AlertType.ERROR));
+                Platform.runLater(() -> exibirAlerta("Erro de Conexão", "Falha ao registar a venda: " + e.getMessage(), Alert.AlertType.ERROR));
                 e.printStackTrace();
             } finally {
                 Platform.runLater(() -> {

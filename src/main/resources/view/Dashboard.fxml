@@ -3,76 +3,73 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.DashboardController">
+<BorderPane fx:id="borderPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@dashboard-styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.DashboardController">
 
+    <!-- TOP: Barra de Título Superior -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" spacing="15.0" style="-fx-background-color: #1a202c;">
+        <HBox alignment="CENTER_LEFT" styleClass="top-bar">
             <padding>
                 <Insets left="15.0" right="20.0" />
             </padding>
             <children>
-                <!-- CORRIGIDO AQUI -->
-                <Button fx:id="menuButton" onAction="#handleToggleSidebar" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                <Button fx:id="menuButton" onAction="#handleToggleSidebar" styleClass="menu-button">
                     <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image><Image url="@../img/img1].png" /></image>
-                        </ImageView>
+                        <SVGPath content="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" styleClass="icon" />
                     </graphic>
                 </Button>
-                <Label fx:id="titleLabel" text="Início" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                <Label fx:id="titleLabel" text="Painel Principal" styleClass="header-title" />
             </children>
         </HBox>
     </top>
 
+    <!-- LEFT: Barra de Navegação Lateral -->
     <left>
-        <VBox fx:id="sidebar" prefWidth="220.0" spacing="10.0" style="-fx-background-color: #1a202c;">
+        <VBox fx:id="sidebar" styleClass="sidebar">
             <padding>
-                <Insets top="20.0" />
+                <Insets top="15.0" />
             </padding>
             <children>
-                <HBox alignment="CENTER" prefHeight="60.0" spacing="10.0" fx:id="logoBox">
+                <HBox fx:id="logoBox" alignment="CENTER_LEFT" styleClass="logo-container">
                     <children>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                            <image><Image url="@../img/img1.png" /></image>
-                        </ImageView>
-                        <Label fx:id="logoLabel" text="Meu App" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold;" />
+                        <SVGPath content="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10,10-4.48,10-10S17.52,2,12,2z M13,17h-2v-2h2V17z M13,13h-2V7h2V13z" styleClass="logo-icon" />
+                        <Label fx:id="logoLabel" text="Thunder" styleClass="logo-text" />
                     </children>
                 </HBox>
 
-                <!-- CORRIGIDO EM TODOS OS BOTÕES ABAIXO -->
-                <Button fx:id="btnInicio" onAction="#handleDashboard" text="Início" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
-                </Button>
-                <Button fx:id="btnVendas" onAction="#handleVendas" text="Consutar estoque" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
-                </Button>
-                <Button fx:id="btnCadastro" text="Cadastro de Produtos"  onAction="#handlecadastro" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
+                <!-- Botões de Navegação -->
+                <Button fx:id="btnInicio" onAction="#handleDashboard" text="Início" maxWidth="Infinity" styleClass="nav-button">
+                    <graphic><SVGPath content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" styleClass="icon"/></graphic>
                 </Button>
 
-                <Button text="Clientes" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
+                <Button fx:id="btnVendas" onAction="#handleVendas" text="Loja" maxWidth="Infinity" styleClass="nav-button">
+                    <graphic><SVGPath content="M18 6h-2c-1.1 0-2 .9-2 2v2.13c.69.16 1.32.48 1.84.94l1.41-1.41c.2-.2.45-.29.71-.29 .55 0 1 .45 1 1v2.59c0 .26-.09.51-.29.7l-1.42 1.42c.45.52.77 1.15.93 1.84H18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM6 8c0-1.1.9-2 2-2h2.13c.16-.69.48-1.32.94-1.84l-1.41-1.41c-.2-.2-.29-.45-.29-.71 0-.55.45-1 1-1h2.59c.26 0 .51.09.7.29l1.42 1.42c.52-.45 1.15-.77 1.84-.93V6c0-1.1-.9-2-2-2H8c-2.21 0-4 1.79-4 4v10c0 2.21 1.79 4 4 4h10c1.1 0 2-.9 2-2v-2.13c-.69-.16-1.32-.48-1.84-.94l1.41 1.41c.2.2.45.29.71.29.55 0 1-.45 1-1v-2.59c0-.26-.09-.51-.29-.7l-1.42-1.42c-.45-.52-.77-1.15-.93-1.84H18c-1.1 0-2 .9-2 2V8c0 1.1-.9 2-2 2h-1.13c-.16.69-.48 1.32-.94 1.84l1.41 1.41c.2.2.29.45.29.71 0 .55-.45 1-1 1h-2.59c-.26 0-.51-.09-.7-.29l-1.42-1.42c-.52.45-1.15.77-1.84.93V18c0 1.1.9 2 2 2h10c2.21 0 4-1.79 4-4V8c0-2.21-1.79-4-4-4z" styleClass="icon"/></graphic>
                 </Button>
-                <Button text="Relatórios" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
+
+                <!-- BOTÃO NOVO ADICIONADO AQUI -->
+                <Button fx:id="btnConsultarEstoque" onAction="#handleConsultarEstoque" text="Consultar Estoque" maxWidth="Infinity" styleClass="nav-button">
+                    <graphic><SVGPath content="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z" styleClass="icon"/></graphic>
                 </Button>
 
                 <Button fx:id="btnPdv" onAction="#handlePdv" text="Ponto de Venda" maxWidth="Infinity" styleClass="nav-button">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1.png"/></image></ImageView></graphic>
+                    <graphic><SVGPath content="M19 18h-4.28c-.35-.62-.77-1.19-1.28-1.69-.9-1.23-2.11-2.14-3.44-2.73V12c.9-.31 1.74-.78 2.45-1.45.92-.89 1.55-2.07 1.55-3.55C14 4.01 12.04 2 9.5 2S5 4.01 5 6.5c0 1.48.63 2.66 1.55 3.55.71.67 1.55 1.14 2.45 1.45v1.58c-1.33.59-2.54 1.5-3.44 2.73-.51.5-.93 1.07-1.28 1.69H5v2h14v-2zM9.5 8.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" styleClass="icon"/></graphic>
+                </Button>
+
+                <Button fx:id="btnCadastro" onAction="#handlecadastro" text="Cadastro de Produtos"  maxWidth="Infinity" styleClass="nav-button">
+                    <graphic><SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" styleClass="icon"/></graphic>
                 </Button>
 
                 <Region VBox.vgrow="ALWAYS" />
 
-                <Button fx:id="btnSair" onAction="#handleSair" text="Sair" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">
-                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
+                <Button fx:id="btnSair" onAction="#handleSair" text="Sair" maxWidth="Infinity" styleClass="nav-button">
+                    <graphic><SVGPath content="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" styleClass="icon"/></graphic>
                     <VBox.margin><Insets bottom="20.0" /></VBox.margin>
                 </Button>
             </children>
@@ -80,6 +77,7 @@
     </left>
 
     <center>
-        <StackPane fx:id="contentArea" style="-fx-background-color: #f7fafc;" BorderPane.alignment="CENTER" />
+        <StackPane fx:id="contentArea" style="-fx-background-color: #f7fafc;" />
     </center>
+
 </BorderPane>

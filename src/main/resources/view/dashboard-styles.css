@@ -1,0 +1,68 @@
+/* Estilo geral da aplicação */
+.root-pane {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Barra superior */
+.top-bar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.header-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3748;
+}
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+/* Barra lateral de navegação */
+.sidebar {
+    -fx-background-color: #1a202c; /* Azul muito escuro */
+}
+
+/* Container do logo */
+.logo-container {
+    -fx-padding: 0 0 10px 20px;
+}
+
+.logo-icon {
+    -fx-fill: #4299e1; /* Azul do logo */
+}
+
+.logo-text {
+    -fx-font-size: 22px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Botões de navegação na barra lateral */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #a0aec0; /* Cinza claro para o texto */
+    -fx-font-size: 14px;
+    -fx-padding: 12px 20px 12px 30px;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-graphic-text-gap: 15px; /* Espaço entre o ícone e o texto */
+    -fx-alignment: center-left;
+}
+
+.nav-button:hover {
+    -fx-background-color: #2d3748; /* Fundo mais escuro ao passar o rato */
+    -fx-text-fill: white;
+}
+
+/* Ícones dentro dos botões */
+.icon {
+    -fx-fill: #a0aec0; /* Cor padrão do ícone */
+}
+
+.nav-button:hover .icon {
+    -fx-fill: white; /* Cor do ícone ao passar o rato */
+}
