@@ -91,8 +91,7 @@ public class PdvController {
 
         new Thread(() -> {
             try {
-                // CORREÇÃO APLICADA AQUI: Adicionado o segundo argumento 'false'.
-                // Isto diz ao serviço para buscar apenas produtos ativos.
+                // Usa o método de busca correto, buscando apenas produtos ativos.
                 List<Peca> pecasEncontradas = pecaService.fetchProdutosComFiltros(filtros, false);
 
                 Platform.runLater(() -> {

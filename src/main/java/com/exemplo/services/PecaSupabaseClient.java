@@ -3,6 +3,8 @@ package com.exemplo.services;
 import com.exemplo.models.Peca;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.exemplo.models.UserProfile;
+
 
 import java.io.File;
 import java.net.URI;
@@ -247,5 +249,69 @@ public class PecaSupabaseClient {
 
     private String mapearTipoParaNomeTabela(String tipoPeca) {
         switch (tipoPeca) { case "Fonte de Alimentação": return "fonte_de_alimentacao"; case "Placa Mãe": return "placa_mae"; case "Processador": return "processador"; case "RAM": return "ram"; case "Placa de Vídeo": return "placa_de_video"; default: return ""; }
+    }
+
+
+    public String fetchUserRole(String userId) throws Exception {
+        String endpoint = SUPABASE_URL + "/rest/v1/profiles?select=role&id=eq." + userId;
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(endpoint))
+                .header("apikey", SUPABASE_ANON_KEY)
+                .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new Exception("Falha ao buscar o cargo do utilizador: " + response.body());
+        }
+
+        JSONArray jsonArray = new JSONArray(response.body());
+        if (jsonArray.isEmpty()) {
+            return "ESTAGIARIO"; // Retorna o cargo padrão se não encontrar perfil
+        }
+        return jsonArray.getJSONObject(0).getString("role");
+    }
+    public List<UserProfile> fetchAllProfiles() throws Exception {
+        String endpoint = SUPABASE_URL + "/rest/v1/profiles?select=id,email,role";
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint)).header("apikey", SUPABASE_ANON_KEY).header("Authorization", "Bearer " + SUPABASE_ANON_KEY).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new Exception("Falha ao buscar perfis de utilizador: " + response.body());
+        }
+
+        List<UserProfile> profiles = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(response.body());
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            profiles.add(new UserProfile(obj.getString("id"), obj.getString("email"), obj.getString("role")));
+        }
+        return profiles;
+    }
+
+    /**
+     * NOVO MÉTODO: Atualiza o cargo de um utilizador específico.
+     * @param userId O ID do utilizador a ser atualizado.
+     * @param newRole O novo cargo a ser atribuído (ex: "NIVEL1").
+     */
+    public void updateUserRole(String userId, String newRole) throws Exception {
+        String endpoint = SUPABASE_URL + "/rest/v1/profiles?id=eq." + userId;
+        JSONObject jsonBody = new JSONObject().put("role", newRole);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(endpoint))
+                .header("apikey", SUPABASE_ANON_KEY)
+                .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 204 && response.statusCode() != 200) {
+            throw new Exception("Falha ao atualizar o cargo do utilizador: " + response.body());
+        }
     }
 }

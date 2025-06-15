@@ -1,9 +1,11 @@
 package com.exemplo.controllers;
 
 import com.exemplo.models.Peca;
+import com.exemplo.services.SessionManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +38,7 @@ public class DashboardController implements Initializable {
     @FXML private Button btnPdv;
     @FXML private Button btnCadastro;
     @FXML private Button btnSair;
+    @FXML private Button btnGestaoAcessos;
 
     // --- Constantes para a animação ---
     private static final double EXPANDED_WIDTH = 230.0;
@@ -45,6 +48,7 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Platform.runLater(this::aplicarPermissoes);
         handleDashboard(null);
     }
 
@@ -72,6 +76,12 @@ public class DashboardController implements Initializable {
         titleLabel.setText("Painel Principal");
         loadPage("BoasVindas.fxml");
     }
+
+    @FXML void handleacesso(ActionEvent event) {
+        titleLabel.setText("Cargos");
+        loadPage("GestaoAcessos.fxml");
+    }
+
 
     /**
      * NOME CORRIGIDO: de handleLoja para handleVendas
@@ -143,4 +153,75 @@ public class DashboardController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
+    private void aplicarPermissoes() {
+        String role = SessionManager.getInstance().getRole();
+
+        // Fallback de segurança: se o cargo for nulo ou desconhecido, será tratado pelo 'default'.
+        if (role == null) {
+            role = "DESCONHECIDO";
+        }
+
+        // 1. Oculta todos os botões para garantir um estado limpo.
+        btnVendas.setVisible(false);
+        btnVendas.setManaged(false);
+        btnPdv.setVisible(false);
+        btnPdv.setManaged(false);
+        btnConsultarEstoque.setVisible(false);
+        btnConsultarEstoque.setManaged(false);
+        btnCadastro.setVisible(false);
+        btnCadastro.setManaged(false);
+        btnGestaoAcessos.setVisible(false);
+        btnGestaoAcessos.setManaged(false);
+
+        boolean acessoLiberado = true;
+
+        // 2. Aplica as permissões com base no cargo.
+        switch (role) {
+            case "SUPERVISOR":
+                // Acesso total. Ativa seu botão exclusivo e herda o resto.
+                btnGestaoAcessos.setVisible(true);
+                btnGestaoAcessos.setManaged(true);
+                // Fall-through intencional para herdar permissões do Nivel2
+
+            case "NIVEL2":
+                // Acesso de Nivel1 + Cadastro. Ativa seu botão e herda o resto.
+
+                btnConsultarEstoque.setVisible(true);
+                btnConsultarEstoque.setManaged(true);
+                // Fall-through intencional para herdar permissões do Nivel1
+
+            case "NIVEL1":
+                // Acesso de Estagiário + Consulta de Estoque.
+                btnCadastro.setVisible(true);
+                btnCadastro.setManaged(true);
+                // Fall-through intencional para herdar permissões de Estagiário
+
+            case "ESTAGIARIO":
+                // NOVO: Acesso limitado a Vendas e Ponto de Venda.
+                btnVendas.setVisible(true);
+                btnVendas.setManaged(true);
+                btnPdv.setVisible(true);
+                btnPdv.setManaged(true);
+                break; // Termina aqui. Estagiário não tem mais permissões.
+
+            default: // Trata cargos nulos ou não reconhecidos.
+                // Acesso totalmente bloqueado.
+                titleLabel.setText("Acesso Negado");
+                contentArea.getChildren().setAll(new Label("Seu cargo não foi reconhecido. Contate um supervisor."));
+                acessoLiberado = false;
+                break;
+        }
+
+        // 3. Carrega a tela inicial se o usuário tiver qualquer acesso liberado.
+        // A condição 'getChildren().isEmpty()' previne recarregar a tela desnecessariamente.
+        if (acessoLiberado && contentArea.getChildren().get(0) instanceof Label) {
+            handleDashboard(null);
+        }
+    }
+
+
+
+
 }

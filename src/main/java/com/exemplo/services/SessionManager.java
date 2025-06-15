@@ -3,7 +3,7 @@ package com.exemplo.services;
 /**
  * Gerencia a sessão do usuário logado usando o padrão Singleton.
  * Isso garante que haja apenas uma instância desta classe em toda a aplicação,
- * funcionando como uma memória central para os dados do usuário.
+ * funcionando como uma memória central para os dados do usuário, incluindo seu cargo.
  */
 public final class SessionManager {
 
@@ -13,6 +13,7 @@ public final class SessionManager {
     // Variáveis para guardar os dados do usuário.
     private String userId;
     private String userEmail;
+    private String role; // NOVO: Campo para armazenar o cargo do usuário.
 
     // Construtor privado impede que outras classes criem novas instâncias.
     private SessionManager() {}
@@ -26,21 +27,24 @@ public final class SessionManager {
     }
 
     /**
-     * Inicia a sessão, guardando os dados do usuário.
+     * MÉTODO ATUALIZADO: Inicia a sessão, guardando todos os dados do usuário.
      * @param userId O UUID do usuário vindo do Supabase.
      * @param userEmail O e-mail do usuário.
+     * @param role O cargo do usuário (ex: "SUPERVISOR").
      */
-    public void startSession(String userId, String userEmail) {
+    public void startSession(String userId, String userEmail, String role) {
         this.userId = userId;
         this.userEmail = userEmail;
+        this.role = role;
     }
 
     /**
-     * Encerra a sessão, limpando os dados do usuário (útil para logout).
+     * Encerra a sessão, limpando todos os dados do usuário.
      */
     public void endSession() {
         this.userId = null;
         this.userEmail = null;
+        this.role = null; // Limpa o cargo ao sair.
     }
 
     /**
@@ -57,6 +61,14 @@ public final class SessionManager {
      */
     public String getUserEmail() {
         return userEmail;
+    }
+
+    /**
+     * NOVO MÉTODO: Retorna o cargo do usuário logado.
+     * @return A string do cargo (ex: "ESTAGIARIO"), ou null se ninguém estiver logado.
+     */
+    public String getRole() {
+        return role;
     }
 
     /**

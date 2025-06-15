@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane style="-fx-background-color: #f4f7fa;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.GestaoAcessosController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <top>
+        <VBox spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Gestão de Utilizadores e Acessos" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+                <Label text="Clique duas vezes no cargo de um utilizador para o promover." style="-fx-text-fill: #718096;" />
+            </children>
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+        </VBox>
+    </top>
+    <center>
+        <StackPane>
+            <children>
+                <TableView fx:id="tabelaUsuarios" editable="true">
+                    <columns>
+                        <TableColumn fx:id="colEmail" prefWidth="350.0" text="E-mail do Utilizador" />
+                        <TableColumn fx:id="colCargo" prefWidth="200.0" text="Cargo Atual" />
+                    </columns>
+                </TableView>
+                <ProgressIndicator fx:id="progressIndicator" visible="false" />
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>
