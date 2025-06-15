@@ -4,6 +4,7 @@ import com.exemplo.models.Peca;
 import com.exemplo.models.Venda;
 import com.exemplo.models.VendaItem;
 import com.exemplo.services.CarrinhoService;
+import com.exemplo.services.CompatibilityService;
 import com.exemplo.services.PecaSupabaseClient;
 import com.exemplo.services.SessionManager;
 import com.exemplo.services.TransacaoService;
@@ -51,6 +52,8 @@ public class PdvController {
     private final TransacaoService transacaoService = new TransacaoService();
     private final CarrinhoService carrinhoService = CarrinhoService.getInstance();
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    private final CompatibilityService compatibilityService = new CompatibilityService();
+
 
     @FXML
     public void initialize() {
@@ -60,6 +63,7 @@ public class PdvController {
         tabelaVenda.setItems(carrinhoService.getItens());
         carrinhoService.getItens().addListener((ListChangeListener<VendaItem>) c -> atualizarTotais());
         atualizarTotais();
+
     }
 
     private void configurarTabelas() {
@@ -82,16 +86,47 @@ public class PdvController {
     /**
      * Lida com a busca de produtos na tela de Ponto de Venda.
      */
+
+
+    @FXML
+    private void handleVerificarCompatibilidade() {
+        System.out.println("[DEBUG] Botão 'Verificar Compatibilidade' clicado.");
+
+        List<VendaItem> itensNoCarrinho = carrinhoService.getItensCopia();
+        List<String> resultados = compatibilityService.verificarCompatibilidade(itensNoCarrinho);
+
+        // AQUI ESTÁ A DECLARAÇÃO DA VARIÁVEL QUE FALTAVA
+        StringBuilder conteudoAlerta = new StringBuilder();
+        for (String resultado : resultados) {
+            String tipo = resultado.substring(0, resultado.indexOf(":"));
+            String mensagem = resultado.substring(resultado.indexOf(":") + 2);
+            conteudoAlerta.append(tipo).append(": ").append(mensagem).append("\n\n");
+        }
+
+        Alert.AlertType tipoAlerta = Alert.AlertType.INFORMATION;
+        if (resultados.stream().anyMatch(r -> r.startsWith("ERRO"))) {
+            tipoAlerta = Alert.AlertType.ERROR;
+        } else if (resultados.stream().anyMatch(r -> r.startsWith("AVISO"))) {
+            tipoAlerta = Alert.AlertType.WARNING;
+        }
+
+        exibirAlerta("Relatório de Compatibilidade", conteudoAlerta.toString(), tipoAlerta);
+    }
+
+
+
+
     @FXML
     private void handleBusca() {
         String termo = buscaField.getText();
 
+        // CORREÇÃO: O mapa agora é do tipo <String, Object> para ser compatível com o serviço.
         Map<String, Object> filtros = new HashMap<>();
         filtros.put("termo_busca_geral", termo);
 
         new Thread(() -> {
             try {
-                // Usa o método de busca correto, buscando apenas produtos ativos.
+                // A chamada agora passa o segundo argumento 'false' para buscar apenas produtos ativos.
                 List<Peca> pecasEncontradas = pecaService.fetchProdutosComFiltros(filtros, false);
 
                 Platform.runLater(() -> {
@@ -219,3 +254,36 @@ public class PdvController {
         alert.showAndWait();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

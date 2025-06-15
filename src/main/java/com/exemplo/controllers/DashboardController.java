@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -26,21 +27,21 @@ import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
 
-    // --- Referências FXML Atualizadas ---
+    // --- Componentes FXML ---
     @FXML private BorderPane borderPane;
     @FXML private StackPane contentArea;
     @FXML private Label titleLabel;
     @FXML private VBox sidebar;
     @FXML private Label logoLabel;
     @FXML private Button btnInicio;
-    @FXML private Button btnVendas; // Corresponde ao botão "Loja" no FXML
+    @FXML private Button btnVendas;
     @FXML private Button btnConsultarEstoque;
     @FXML private Button btnPdv;
     @FXML private Button btnCadastro;
-    @FXML private Button btnSair;
     @FXML private Button btnGestaoAcessos;
+    @FXML private Button btnSair;
 
-    // --- Constantes para a animação ---
+    // --- Constantes para animação ---
     private static final double EXPANDED_WIDTH = 230.0;
     private static final double COLLAPSED_WIDTH = 60.0;
     private static final Duration ANIMATION_DURATION = Duration.millis(250);
@@ -52,6 +53,51 @@ public class DashboardController implements Initializable {
         handleDashboard(null);
     }
 
+    private void aplicarPermissoes() {
+        String role = SessionManager.getInstance().getRole();
+
+        if (role == null) {
+            role = "ESTAGIARIO"; // Segurança: assume o cargo mais restritivo.
+        }
+
+        // 1. Oculta todos os botões funcionais por defeito.
+        btnVendas.setVisible(false); btnVendas.setManaged(false);
+        btnPdv.setVisible(false); btnPdv.setManaged(false);
+        btnConsultarEstoque.setVisible(false); btnConsultarEstoque.setManaged(false);
+        btnCadastro.setVisible(false); btnCadastro.setManaged(false);
+        btnGestaoAcessos.setVisible(false); btnGestaoAcessos.setManaged(false);
+
+        boolean acessoBloqueado = false;
+
+        // 2. Aplica as permissões com base no cargo (hierarquia).
+        switch (role) {
+            case "SUPERVISOR":
+                btnGestaoAcessos.setVisible(true);
+                btnGestaoAcessos.setManaged(true);
+            case "NIVEL2":
+                btnConsultarEstoque.setVisible(true);
+                btnConsultarEstoque.setManaged(true);
+            case "NIVEL1":
+                btnCadastro.setVisible(true);
+                btnCadastro.setManaged(true);
+            case "ESTAGIARIO":
+                btnVendas.setVisible(true);
+                btnVendas.setManaged(true);
+                btnPdv.setVisible(true);
+                btnPdv.setManaged(true);
+                break;
+            default: // Trata cargos nulos ou não reconhecidos.
+                acessoBloqueado = true;
+                titleLabel.setText("Acesso Pendente");
+                contentArea.getChildren().setAll(new Label("O seu acesso precisa de ser libertado por um supervisor."));
+                break;
+        }
+
+        if (!acessoBloqueado && contentArea.getChildren().get(0) instanceof Label) {
+            handleDashboard(null);
+        }
+    }
+
     @FXML
     void handleToggleSidebar(ActionEvent event) {
         sidebarCollapsed = !sidebarCollapsed;
@@ -59,9 +105,10 @@ public class DashboardController implements Initializable {
 
         btnInicio.setText(sidebarCollapsed ? "" : "Início");
         btnVendas.setText(sidebarCollapsed ? "" : "Loja");
+        btnConsultarEstoque.setText(sidebarCollapsed ? "" : "Consultar Estoque");
         btnPdv.setText(sidebarCollapsed ? "" : "Ponto de Venda");
         btnCadastro.setText(sidebarCollapsed ? "" : "Cadastro de Produtos");
-        btnConsultarEstoque.setText(sidebarCollapsed ? "" : "Consultar Estoque");
+        if (btnGestaoAcessos != null) btnGestaoAcessos.setText(sidebarCollapsed ? "" : "Gestão de Acessos");
         btnSair.setText(sidebarCollapsed ? "" : "Sair");
         logoLabel.setVisible(!sidebarCollapsed);
         logoLabel.setManaged(!sidebarCollapsed);
@@ -74,42 +121,54 @@ public class DashboardController implements Initializable {
 
     @FXML void handleDashboard(ActionEvent event) {
         titleLabel.setText("Painel Principal");
-        loadPage("BoasVindas.fxml");
+        loadGenericPage("BoasVindas.fxml");
     }
 
-    @FXML void handleacesso(ActionEvent event) {
-        titleLabel.setText("Cargos");
-        loadPage("GestaoAcessos.fxml");
-    }
-
-
-    /**
-     * NOME CORRIGIDO: de handleLoja para handleVendas
-     * Este método agora corresponde ao onAction no FXML para o botão "Loja".
-     */
     @FXML void handleVendas(ActionEvent event) {
         titleLabel.setText("Loja");
-        loadPage("Vendas.fxml");
-    }
-
-    @FXML void handlePdv(ActionEvent event) {
-        titleLabel.setText("Ponto de Venda");
-        loadPage("PdvView.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Vendas.fxml")); // Ajuste o caminho se necessário
+            Parent page = loader.load();
+            VendasController vendasController = loader.getController();
+            System.out.println("[LOG] Injetando DashboardController em VendasController...");
+            vendasController.setDashboardController(this);
+            contentArea.getChildren().setAll(page);
+        } catch (IOException e) {
+            System.err.println("[ERRO CRÍTICO] Falha ao carregar a página de Vendas.fxml: " + e.getMessage());
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Não foi possível carregar a loja. Verifique o console para mais detalhes.").show();
+        }
     }
 
     @FXML void handleConsultarEstoque(ActionEvent event) {
         titleLabel.setText("Consulta de Estoque");
-        loadPage("VisualizarProdutos.fxml");
+        loadGenericPage("VisualizarProdutos.fxml");
+    }
+
+    @FXML void handlePdv(ActionEvent event) {
+        titleLabel.setText("Ponto de Venda");
+        loadGenericPage("PdvView.fxml");
     }
 
     @FXML void handlecadastro(ActionEvent event) {
         titleLabel.setText("Cadastro de Produto");
-        loadPage("Produto.fxml");
+        loadGenericPage("Produto.fxml");
+    }
+
+    /**
+     * CORREÇÃO: Método renomeado de 'handleGestaoAcessos' para 'handleacesso'
+     * para corresponder ao onAction definido no arquivo Dashboard.fxml.
+     */
+    @FXML
+    void handleacesso(ActionEvent event) {
+        titleLabel.setText("Gestão de Acessos");
+        loadGenericPage("GestaoAcessos.fxml");
     }
 
     @FXML
     void handleSair(ActionEvent event) {
         try {
+            SessionManager.getInstance().endSession();
             Stage currentStage = (Stage) borderPane.getScene().getWindow();
             currentStage.close();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
@@ -123,105 +182,29 @@ public class DashboardController implements Initializable {
         }
     }
 
-    private void loadPage(String fxml) {
+    private void loadGenericPage(String fxml) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/" + fxml));
             Parent page = loader.load();
-            Object controller = loader.getController();
-
-            if (controller instanceof VisualizarProdutosController) {
-                ((VisualizarProdutosController) controller).setDashboardController(this);
-            }
-
             contentArea.getChildren().setAll(page);
         } catch (IOException e) {
-            System.err.println("Erro ao carregar a página: " + fxml);
+            System.err.println("[ERRO] Falha ao carregar a página genérica: " + fxml);
             e.printStackTrace();
         }
     }
 
     public void carregarDetalhesPeca(Peca peca) {
+        System.out.println("[LOG] DashboardController recebeu o chamado para carregar detalhes da peça: " + peca.getNome());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/detalhe_peca.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/detalhe_peca.fxml")); // Ajuste o caminho se necessário
             Parent page = loader.load();
             DetalhePecaController controller = loader.getController();
             controller.setPeca(peca);
             titleLabel.setText("Detalhes da Peça");
             contentArea.getChildren().setAll(page);
         } catch (IOException e) {
-            System.err.println("Erro ao carregar a página de detalhes da peça.");
+            System.err.println("[ERRO CRÍTICO] Falha ao carregar a página de detalhes da peça.");
             e.printStackTrace();
         }
     }
-
-
-    private void aplicarPermissoes() {
-        String role = SessionManager.getInstance().getRole();
-
-        // Fallback de segurança: se o cargo for nulo ou desconhecido, será tratado pelo 'default'.
-        if (role == null) {
-            role = "DESCONHECIDO";
-        }
-
-        // 1. Oculta todos os botões para garantir um estado limpo.
-        btnVendas.setVisible(false);
-        btnVendas.setManaged(false);
-        btnPdv.setVisible(false);
-        btnPdv.setManaged(false);
-        btnConsultarEstoque.setVisible(false);
-        btnConsultarEstoque.setManaged(false);
-        btnCadastro.setVisible(false);
-        btnCadastro.setManaged(false);
-        btnGestaoAcessos.setVisible(false);
-        btnGestaoAcessos.setManaged(false);
-
-        boolean acessoLiberado = true;
-
-        // 2. Aplica as permissões com base no cargo.
-        switch (role) {
-            case "SUPERVISOR":
-                // Acesso total. Ativa seu botão exclusivo e herda o resto.
-                btnGestaoAcessos.setVisible(true);
-                btnGestaoAcessos.setManaged(true);
-                // Fall-through intencional para herdar permissões do Nivel2
-
-            case "NIVEL2":
-                // Acesso de Nivel1 + Cadastro. Ativa seu botão e herda o resto.
-
-                btnConsultarEstoque.setVisible(true);
-                btnConsultarEstoque.setManaged(true);
-                // Fall-through intencional para herdar permissões do Nivel1
-
-            case "NIVEL1":
-                // Acesso de Estagiário + Consulta de Estoque.
-                btnCadastro.setVisible(true);
-                btnCadastro.setManaged(true);
-                // Fall-through intencional para herdar permissões de Estagiário
-
-            case "ESTAGIARIO":
-                // NOVO: Acesso limitado a Vendas e Ponto de Venda.
-                btnVendas.setVisible(true);
-                btnVendas.setManaged(true);
-                btnPdv.setVisible(true);
-                btnPdv.setManaged(true);
-                break; // Termina aqui. Estagiário não tem mais permissões.
-
-            default: // Trata cargos nulos ou não reconhecidos.
-                // Acesso totalmente bloqueado.
-                titleLabel.setText("Acesso Negado");
-                contentArea.getChildren().setAll(new Label("Seu cargo não foi reconhecido. Contate um supervisor."));
-                acessoLiberado = false;
-                break;
-        }
-
-        // 3. Carrega a tela inicial se o usuário tiver qualquer acesso liberado.
-        // A condição 'getChildren().isEmpty()' previne recarregar a tela desnecessariamente.
-        if (acessoLiberado && contentArea.getChildren().get(0) instanceof Label) {
-            handleDashboard(null);
-        }
-    }
-
-
-
-
 }

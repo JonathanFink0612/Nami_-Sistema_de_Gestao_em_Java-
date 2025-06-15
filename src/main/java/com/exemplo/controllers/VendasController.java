@@ -44,10 +44,23 @@ public class VendasController {
     private final PecaSupabaseClient pecaService = new PecaSupabaseClient();
     private final CarrinhoService carrinhoService = CarrinhoService.getInstance();
     private final List<CheckBox> listaFiltrosCategoria = new ArrayList<>();
+    private DashboardController dashboardController;
+
+    /**
+     * Este é o método de injeção. Ele será chamado pelo DashboardController.
+     */
+    public void setDashboardController(DashboardController dashboardController) {
+        this.dashboardController = dashboardController;
+        if (this.dashboardController != null) {
+            System.out.println("[LOG] VendasController recebeu a instância do DashboardController com sucesso!");
+        } else {
+            System.err.println("[ALERTA] VendasController recebeu uma instância NULA do DashboardController.");
+        }
+    }
 
     @FXML
     public void initialize() {
-        // Associa programaticamente os RadioButtons ao ToggleGroup
+        System.out.println("[LOG] VendasController.initialize() foi chamado.");
         rbPotenciaEntrada.setToggleGroup(grupoPotencia);
         rbPotenciaIntermediario.setToggleGroup(grupoPotencia);
         rbPotenciaAvancado.setToggleGroup(grupoPotencia);
@@ -103,7 +116,6 @@ public class VendasController {
             System.err.println("Valor de preço inválido: " + e.getMessage());
         }
 
-        // A página da Loja sempre busca apenas produtos ativos.
         carregarProdutos(filtrosAtivos, false);
     }
 
@@ -115,18 +127,12 @@ public class VendasController {
         aplicarFiltros();
     }
 
-    /**
-     * Executa a busca no Supabase numa thread separada para não bloquear a UI.
-     * @param filtros O mapa de filtros a ser enviado para o serviço.
-     * @param incluirInativos Se deve ou não incluir produtos inativos na busca.
-     */
     private void carregarProdutos(Map<String, Object> filtros, boolean incluirInativos) {
         productGrid.getChildren().clear();
         productGrid.getChildren().add(new Label("A carregar produtos..."));
 
         new Thread(() -> {
             try {
-                // CORREÇÃO: A chamada ao serviço agora inclui o booleano.
                 List<Peca> produtos = pecaService.fetchProdutosComFiltros(filtros, incluirInativos);
                 Platform.runLater(() -> {
                     productGrid.getChildren().clear();
@@ -173,6 +179,20 @@ public class VendasController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, peca.getNome() + " adicionado ao carrinho!");
             alert.setHeaderText("Sucesso");
             alert.show();
+        });
+
+        card.setOnMouseClicked(event -> {
+            if (dashboardController != null) {
+                System.out.println("[LOG] Card clicado. Chamando dashboardController para navegar para detalhes da peça: " + peca.getNome());
+                dashboardController.carregarDetalhesPeca(peca);
+            } else {
+                System.err.println("[ERRO FATAL] Tentativa de navegar, mas o DashboardController NUNCA foi injetado. A navegação falhou.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro de Configuração");
+                alert.setHeaderText("Falha na Navegação");
+                alert.setContentText("Ocorreu um erro interno. A referência ao painel principal não foi encontrada.");
+                alert.showAndWait();
+            }
         });
 
         card.getChildren().addAll(imageView, nomeLabel, precoLabel, btnAdicionar);

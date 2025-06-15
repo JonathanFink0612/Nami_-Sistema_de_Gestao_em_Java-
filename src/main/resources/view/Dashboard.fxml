@@ -52,6 +52,7 @@
                 <Button fx:id="btnVendas" onAction="#handleVendas" text="Loja" maxWidth="Infinity" styleClass="nav-button">
                     <graphic><SVGPath content="M18 6h-2c-1.1 0-2 .9-2 2v2.13c.69.16 1.32.48 1.84.94l1.41-1.41c.2-.2.45-.29.71-.29 .55 0 1 .45 1 1v2.59c0 .26-.09.51-.29.7l-1.42 1.42c.45.52.77 1.15.93 1.84H18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM6 8c0-1.1.9-2 2-2h2.13c.16-.69.48-1.32.94-1.84l-1.41-1.41c-.2-.2-.29-.45-.29-.71 0-.55.45-1 1-1h2.59c.26 0 .51.09.7.29l1.42 1.42c.52-.45 1.15-.77 1.84-.93V6c0-1.1-.9-2-2-2H8c-2.21 0-4 1.79-4 4v10c0 2.21 1.79 4 4 4h10c1.1 0 2-.9 2-2v-2.13c-.69-.16-1.32-.48-1.84-.94l1.41 1.41c.2.2.45.29.71.29.55 0 1-.45 1-1v-2.59c0-.26-.09-.51-.29-.7l-1.42-1.42c-.45-.52-.77-1.15-.93-1.84H18c-1.1 0-2 .9-2 2V8c0 1.1-.9 2-2 2h-1.13c-.16.69-.48 1.32-.94 1.84l1.41 1.41c.2.2.29.45.29.71 0 .55-.45 1-1 1h-2.59c-.26 0-.51-.09-.7-.29l-1.42-1.42c-.52.45-1.15.77-1.84.93V18c0 1.1.9 2 2 2h10c2.21 0 4-1.79 4-4V8c0-2.21-1.79-4-4-4z" styleClass="icon"/></graphic>
                 </Button>
+                <!-- Dentro do VBox da sua barra lateral em Dashboard.fxml -->
 
                 <!-- BOTÃO NOVO ADICIONADO AQUI -->
                 <Button fx:id="btnConsultarEstoque" onAction="#handleConsultarEstoque" text="Consultar Estoque" maxWidth="Infinity" styleClass="nav-button">

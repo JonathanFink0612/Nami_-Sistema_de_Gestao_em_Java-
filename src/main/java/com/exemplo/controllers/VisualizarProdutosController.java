@@ -33,7 +33,7 @@ public class VisualizarProdutosController {
 
     // --- Serviços ---
     private final PecaSupabaseClient pecaService = new PecaSupabaseClient();
-    private DashboardController dashboardController; // Para futuras integrações
+    private DashboardController dashboardController;
 
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;

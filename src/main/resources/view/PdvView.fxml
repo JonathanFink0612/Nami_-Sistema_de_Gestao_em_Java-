@@ -98,6 +98,7 @@
                         <TextArea fx:id="observacoesField" prefHeight="80.0" promptText="Detalhes da venda, cliente, etc." wrapText="true" />
                     </children>
                 </VBox>
+                <Button fx:id="btnVerificarCompatibilidade" onAction="#handleVerificarCompatibilidade" text="Verificar Compatibilidade" maxWidth="Infinity" style="-fx-background-color: #4299e1; -fx-text-fill: white; -fx-font-weight: bold;"/>
                 <Button fx:id="btnFinalizarVenda" onAction="#handleFinalizarVenda" prefHeight="50.0" prefWidth="Infinity" text="Finalizar Venda" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
                 <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER" wrapText="true" />
             </children>
