@@ -1,4 +1,4 @@
-package com.exemplo.services; // ou com.exemplo.services
+package com.exemplo.services;
 
 import org.json.JSONObject;
 
@@ -55,10 +55,8 @@ public class ServiceCadastroLogin {
 
 
     public boolean enviarEmailRedefinicaoSenha(String email, String redirectTo) throws Exception {
-        // A URL correta inclui o redirectTo como query param
         String recoverUrl = SUPABASE_URL + "/auth/v1/recover?redirect_to=" + URI.create(redirectTo);
 
-        // O corpo da requisição deve conter apenas o email
         String json = new JSONObject()
                 .put("email", email)
                 .toString();

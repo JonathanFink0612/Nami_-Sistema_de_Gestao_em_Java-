@@ -11,17 +11,20 @@ public class Peca {
     private String descricao;
     private String tipoPeca;
     private int poderComputacional;
-    // Campos para criação
     private double preco;
     private int quantidade;
     private String codigoDeBarras;
+    private String observacoes;
 
-    // Campos para visualização e upload
     private final List<String> imageUrls = new ArrayList<>();
     private final Map<String, Object> camposAdicionais = new HashMap<>();
 
-    // Construtor para buscar dados do banco para visualização
-    public Peca(int pecaId, String nome, String descricao, String tipoPeca, int poderComputacional, double preco , String codigoDeBarras) {
+    /**
+     * CONSTRUTOR 1: Para CARREGAR uma peça existente do banco de dados.
+     * Usado pelo PecaSupabaseClient ao buscar produtos.
+     * Note que ele começa com 'pecaId' (int) e também carrega a 'quantidade'.
+     */
+    public Peca(int pecaId, String nome, String descricao, String tipoPeca, int poderComputacional, double preco, String codigoDeBarras, int quantidade) {
         this.pecaId = pecaId;
         this.nome = nome;
         this.descricao = descricao;
@@ -29,10 +32,15 @@ public class Peca {
         this.poderComputacional = poderComputacional;
         this.preco = preco;
         this.codigoDeBarras = codigoDeBarras;
+        this.quantidade = quantidade;
     }
 
-    // Construtor para criar uma nova peça na tela de cadastro
-    public Peca(String nome, String descricao, double preco, int quantidade, String tipoPeca, String codigoDeBarras, int poderComputacional ) {
+    /**
+     * CONSTRUTOR 2: Para CRIAR uma nova peça a partir do formulário de cadastro.
+     * Este é o construtor que o seu ProdutoController precisa. Note que ele começa
+     * com 'nome' (String) e não com um ID.
+     */
+    public Peca(String nome, String descricao, double preco, int quantidade, String tipoPeca, String codigoDeBarras, int poderComputacional) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
@@ -51,16 +59,11 @@ public class Peca {
     public String getTipoPeca() { return tipoPeca; }
     public int getPoderComputacional() { return poderComputacional; }
     public double getPreco() { return preco; }
+    public int getQuantidade() { return quantidade; }
+    public String getObservacoes() { return observacoes; }
+    public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
     public List<String> getImageUrls() { return imageUrls; }
     public void addImageUrl(String url) { this.imageUrls.add(url); }
-    public Map<String, Object> getCamposAdicionais() { return camposAdicionais; } // Método restaurado
+    public Map<String, Object> getCamposAdicionais() { return camposAdicionais; }
     public void setCampoAdicional(String key, Object value) { this.camposAdicionais.put(key, value); }
-    // Adicione estes métodos dentro da sua classe Peca.java
-
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-
 }

@@ -65,6 +65,10 @@
                     <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1].png"/></image></ImageView></graphic>
                 </Button>
 
+                <Button fx:id="btnPdv" onAction="#handlePdv" text="Ponto de Venda" maxWidth="Infinity" styleClass="nav-button">
+                    <graphic><ImageView fitHeight="20" fitWidth="20" preserveRatio="true"><image><Image url="@../img/img1.png"/></image></ImageView></graphic>
+                </Button>
+
                 <Region VBox.vgrow="ALWAYS" />
 
                 <Button fx:id="btnSair" onAction="#handleSair" text="Sair" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0aec0; -fx-font-size: 14px; -fx-alignment: center-left; -fx-padding: 10 10 10 30; -fx-cursor: hand;">

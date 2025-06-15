@@ -48,6 +48,10 @@ public class DashboardController implements Initializable {
     private Button btnSair;
 
     @FXML
+    private Button btnPdv;
+
+
+    @FXML
     private Button btnCadastro;
 
     private boolean sidebarCollapsed = false;
@@ -101,6 +105,13 @@ public class DashboardController implements Initializable {
         titleLabel.setText("Cadastro Produto");
         loadPage("Produto.fxml");
     }
+
+    @FXML
+    void handlePdv(ActionEvent event) {
+        titleLabel.setText("Ponto de Venda");
+        loadPage("PdvView.fxml");
+    }
+
 
     @FXML
     void handleSair(ActionEvent event) {

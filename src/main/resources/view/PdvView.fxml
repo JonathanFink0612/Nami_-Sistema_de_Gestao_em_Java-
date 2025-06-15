@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #f7fafc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.controllers.PdvController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <center>
+        <BorderPane>
+            <top>
+                <!-- SEÇÃO DE BUSCA DE PRODUTOS (ESTAVA FALTANDO) -->
+                <VBox spacing="15.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="Ponto de Venda (PDV)" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a202c;" />
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label text="Buscar Produto:" style="-fx-font-weight: bold;" />
+                                <TextField fx:id="buscaField" onKeyReleased="#handleBusca" prefWidth="300.0" promptText="Digite o nome ou código de barras" />
+                            </children>
+                        </HBox>
+                        <TableView fx:id="tabelaBusca" prefHeight="150.0">
+                            <columns>
+                                <TableColumn fx:id="colBuscaNome" prefWidth="300.0" text="Nome" />
+                                <TableColumn fx:id="colBuscaPreco" prefWidth="100.0" text="Preço" />
+                                <TableColumn fx:id="colBuscaEstoque" prefWidth="80.0" text="Estoque" />
+                                <TableColumn fx:id="colBuscaAcao" prefWidth="120.0" text="Ação" />
+                            </columns>
+                        </TableView>
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" />
+                    </padding>
+                </VBox>
+            </top>
+            <center>
+                <!-- SEÇÃO DO CARRINHO DE COMPRAS (ESTAVA FALTANDO) -->
+                <VBox spacing="10.0">
+                    <children>
+                        <Label text="Itens da Venda" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2d3748;" />
+                        <TableView fx:id="tabelaVenda" prefHeight="250.0" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colVendaNome" prefWidth="250.0" text="Produto" />
+                                <TableColumn fx:id="colVendaQtd" prefWidth="100.0" text="Quantidade" />
+                                <TableColumn fx:id="colVendaPrecoUnit" prefWidth="120.0" text="Preço Unit." />
+                                <TableColumn fx:id="colVendaSubtotal" prefWidth="120.0" text="Subtotal" />
+                                <TableColumn fx:id="colVendaAcao" prefWidth="80.0" text="Remover" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+    <right>
+        <!-- SEÇÃO DO RESUMO (JÁ ESTAVA CORRETA) -->
+        <VBox spacing="15.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 8;" prefWidth="280.0">
+            <children>
+                <Label text="Resumo da Venda" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                <VBox spacing="10.0">
+                    <children>
+                        <Label text="Método de Pagamento:" />
+                        <ComboBox fx:id="comboPagamento" prefWidth="Infinity" promptText="Selecione" />
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label text="Subtotal:" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="lblSubtotal" text="R$ 0,00" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" style="-fx-font-size: 18px; -fx-font-weight: bold;">
+                            <children>
+                                <Label text="TOTAL:" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="lblTotal" text="R$ 0,00" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Observações:" />
+                        <TextArea fx:id="observacoesField" prefHeight="80.0" promptText="Detalhes da venda, cliente, etc." wrapText="true" />
+                    </children>
+                </VBox>
+                <Button fx:id="btnFinalizarVenda" onAction="#handleFinalizarVenda" prefHeight="50.0" prefWidth="Infinity" text="Finalizar Venda" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+                <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER" wrapText="true" />
+            </children>
+            <BorderPane.margin>
+                <Insets left="20.0" />
+            </BorderPane.margin>
+        </VBox>
+    </right>
+</BorderPane>
